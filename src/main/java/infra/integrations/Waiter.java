@@ -19,9 +19,8 @@ package infra.integrations;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.jmx.export.annotation.ManagedOperation;
-import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
 
 /**
  * A managed resource implementation to expose the total deliveries via the Control Bus
@@ -29,8 +28,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  * @author Marius Bogoevici
  * @author David Turanski
  */
-@ManagedResource
-@Bean
+@Component
 public class Waiter {
 
 	private AtomicInteger totalDeliveries = new AtomicInteger();
