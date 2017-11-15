@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infra.security.service.service;
+package com.infra.security.service;
 
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;

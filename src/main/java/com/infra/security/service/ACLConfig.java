@@ -1,5 +1,7 @@
-package com.infra.security.service.service;
+package com.infra.security.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
@@ -14,12 +16,15 @@ import org.springframework.security.acls.jdbc.BasicLookupStrategy;
 import org.springframework.security.acls.jdbc.JdbcMutableAclService;
 import org.springframework.security.acls.jdbc.LookupStrategy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Configuration
 public class ACLConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(ACLConfig.class);
 
     @Autowired
     DataSource dataSource;
@@ -67,35 +72,10 @@ public class ACLConfig {
     }
 
     @Bean
-    public DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
-        return new DefaultMethodSecurityExpressionHandler();
-    }
-
-    @Bean
     public MethodSecurityExpressionHandler createExpressionHandler() {
-        DefaultMethodSecurityExpressionHandler expressionHandler = defaultMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(new AclPermissionEvaluator(aclService()));
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator(aclService()));
         expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
         return expressionHandler;
-    }
-
-    @Bean
-    public JdbcUserDetailsManager userDetailsManager() {
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
-        manager.setDataSource(dataSource);
-        manager.setUsersByUsernameQuery(
-                "select username,password,enabled from users where username=?");
-        manager.setAuthoritiesByUsernameQuery(
-                "select username, authority from authorities where username=?");
-        manager.setGroupAuthoritiesByUsernameQuery(
-                "select g.id, g.group_name, ga.authority " +
-                "from groups g, group_members gm, group_authorities ga " +
-                "where " +
-                        "gm.username = ? and " +
-                        "g.id = ga.group_id and " +
-                        "g.id = gm.group_id"
-        );
-//        manager.setRolePrefix("ROLE_");
-        return manager;
     }
 }

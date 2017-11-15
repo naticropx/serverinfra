@@ -1,9 +1,9 @@
 /**
  * 
  */
-package com.infra.security.service.service.impl;
+package com.infra.security.service.impl;
 
-import com.infra.security.service.service.UserGroupManager;
+import com.infra.security.service.UserGroupManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

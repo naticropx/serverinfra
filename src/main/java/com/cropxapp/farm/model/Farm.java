@@ -1,5 +1,7 @@
 package com.cropxapp.farm.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -43,4 +45,5 @@ public class Farm implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
 }

@@ -3,8 +3,7 @@
  */
 package com.infra.security.service;
 
-import com.infra.security.service.service.UserGroupManager;
-import com.infra.security.service.service.impl.SecurityTestService;
+import com.infra.security.service.impl.SecurityTestService;
 import com.cropxapp.AbstractSecurityTest;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +15,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
@@ -48,7 +46,7 @@ public class SecurityGroupsTest extends AbstractSecurityTest {
 		authorities.add(new SimpleGrantedAuthority("ROLE_GROUP"));
 		jdbcUserDetailsManager.createGroup(TEST_GROUP, authorities);
 		userGroupManager.createUserWithAuthoriy(USER_USER, "ROLE_USER");
-		user = jdbcUserDetailsManager.loadUserByUsername("user");
+		user = jdbcUserDetailsManager.loadUserByUsername(USER_USER);
 	}
 	
 	@Test
@@ -84,20 +82,24 @@ public class SecurityGroupsTest extends AbstractSecurityTest {
 	public void testUserInGroupHasNoAccessToRoleAdminMethod() {
 		jdbcUserDetailsManager.addUserToGroup(user.getUsername(), TEST_GROUP);
 		userGroupManager.setAuthentication(user.getUsername());
-		System.out.println("=====> Group Authorities = " + userGroupManager.listGroupAuthorities(TEST_GROUP));
-		System.out.println("=====> User Authorities = " + user.getAuthorities());
 		expectedException.expect(AccessDeniedException.class);
 		securityTestService.testHasRoleAdmin();
 	}
 	
 	@Test
-	public void testUserInGroupHasAccessToRoleUserAndRoleGroup() {
+	public void testUserInGroupHasAccessToRoleUser() {
 		jdbcUserDetailsManager.addUserToGroup(user.getUsername(), TEST_GROUP);
 		userGroupManager.setAuthentication(user.getUsername());
 		assertThat(securityTestService.testHasRoleUser(), is(true));
-		assertThat(securityTestService.testHasRoleGroup(), is(true));
 	}
 	
+	@Test
+	public void testUserInGroupHasAccessToRoleGroup() {
+		jdbcUserDetailsManager.addUserToGroup(user.getUsername(), TEST_GROUP);
+		userGroupManager.setAuthentication(user.getUsername());
+		assertThat(securityTestService.testHasRoleGroup(), is(true));
+	}
+
 	@After
 	public void tearDown() {
 		jdbcUserDetailsManager.deleteUser(USER_USER);

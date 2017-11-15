@@ -1,6 +1,5 @@
 package com.infra.security.service;
 
-import com.infra.security.service.service.UserGroupManager;
 import com.cropxapp.AbstractSecurityTest;
 import org.junit.After;
 import org.junit.Before;

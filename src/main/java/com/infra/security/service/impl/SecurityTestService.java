@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infra.security.service.service.impl;
+package com.infra.security.service.impl;
 
 import com.cropxapp.farm.model.Farm;
 import org.slf4j.Logger;

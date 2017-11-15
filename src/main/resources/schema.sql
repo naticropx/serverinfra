@@ -78,7 +78,7 @@ create table acl_entry(
 	constraint foreign_fk_4 foreign key(acl_object_identity) references acl_object_identity(id),
 	constraint foreign_fk_5 foreign key(sid) references acl_sid(id)
 );
---
+
 -- create table farm(
 --   id bigserial primary key,
 --   name varchar(50) not null,
