@@ -12,13 +12,13 @@
  */
 package infra.integrations;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 /**
  * @author David Turanski
  *
  */
-@Bean
+@Component
 public class Customer {
 	int orderNumber = 1;
 	public Order getOrder(){
